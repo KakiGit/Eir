@@ -5,7 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.huawei.hiardemo.bodyar2d.MainActivity">
+    tools:context=".MainActivity">
 
     <android.opengl.GLSurfaceView
         android:id="@+id/surfaceview"
@@ -21,5 +21,17 @@
         android:textColor="@color/red"
         tools:layout_editor_absoluteX="315dp"
         tools:layout_editor_absoluteY="4dp" />
+
+    <TextView
+        android:id="@+id/progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="16dp"
+        android:text="TextView"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </android.support.constraint.ConstraintLayout>

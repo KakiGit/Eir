@@ -1,10 +1,18 @@
+apply from: 'config/gradle/versioning.gradle'
+
+apply from: 'config/gradle/checkstyle.gradle'
 buildscript {
+    apply from: 'config/gradle/versioning.gradle'
     repositories {
         google()
+        mavenCentral()
         maven { url 'http://repo1.maven.org/maven2' }
+        maven { url "https://repository.sysdigi.net/m2/libs-release"}
+
         jcenter()
     }
     dependencies {
+        classpath "org.jfrog.buildinfo:build-info-extractor-gradle:$versions.buildInfoExtractor"
         classpath 'com.android.tools.build:gradle:3.2.1'
     }
 }

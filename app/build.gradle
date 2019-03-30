@@ -4,17 +4,20 @@ android {
     compileSdkVersion 27
 
 
-
     defaultConfig {
-        applicationId "com.huawei.hiardemo.bodyar2d"
-        minSdkVersion 26
+        applicationId "hackton.health.eir"
+        minSdkVersion 21
         targetSdkVersion 27
         versionCode 1
 
         ndk {
             abiFilters  "armeabi-v7a"
         }
+        resValue "string", "APP_ID", "jDlT16D0AR8vGOOddajfZGfUsDxY7wNL" // <- sample: "gDdQfubl66rj07webI92m4afPL9va9Z1" (32 characters hex string given by digi.me support)
+        resValue "string", "P12_KEYSTORE_PASSWORD", "monkey periscope" // <- sample: "20ov;p-1Fi3oL" (the password that goes with your private key). You will need to request the key password from dev support if using pre-set contract ID.
 
+        resValue "string", "CONTRACT_ID", "gzqYsbQ1V1XROWjmqiFLcH2AF1jvcKcg" // <- demo contract ID for testing purposes
+        resValue "string", "P12_KEYSTORE_FILENAME", "CA_RSA_PRIVATE_KEY.p12" // <- demo private key in assets folder, accompanying the demo contract ID
     }
 
     buildTypes {
@@ -40,8 +43,9 @@ dependencies {
     implementation 'javax.vecmath:vecmath:1.5.2'
     implementation 'de.javagl:obj:0.3.0'
     implementation group: 'gov.nist.math', name: 'jama', version: '1.0.2'
-
-
+    implementation project(path: ':digime-core')
+    implementation "com.squareup.retrofit2:retrofit:$versions.retrofit"
+    implementation "com.squareup.retrofit2:converter-gson:$versions.retrofit"
     implementation 'com.github.florent37:materialviewpager:1.2.3'
 
 //dependencies

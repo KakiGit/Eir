@@ -1,5 +1,6 @@
 package hackton.health.eir;
 
+
 import android.graphics.Color;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
@@ -29,11 +30,20 @@ import com.huawei.hiar.exceptions.ARUnavailableEmuiNotCompatibleException;
 import com.huawei.hiar.exceptions.ARUnavailableServiceApkTooOldException;
 import com.huawei.hiar.exceptions.ARUnavailableServiceNotInstalledException;
 import com.huawei.hiar.exceptions.ARUnavailableUserDeclinedInstallationException;
+
+import junit.framework.Test;
+
 import hackton.health.eir.rendering.BackgroundRenderer;
 import hackton.health.eir.rendering.BodySkeletonRenderer;
 import hackton.health.eir.rendering.SkeletonLineRenderer;
+import hackton.health.eir.rendering.StandardSkeletonRenderer;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Vector;
 import java.util.concurrent.ArrayBlockingQueue;
 
 import javax.microedition.khronos.egl.EGLConfig;
@@ -53,7 +63,7 @@ public class MainActivity extends AppCompatActivity implements GLSurfaceView.Ren
 
     private BodySkeletonRenderer mBodySkeleton = new BodySkeletonRenderer();
     private SkeletonLineRenderer mSkeletonConnection = new SkeletonLineRenderer();
-
+    private StandardSkeletonRenderer mStandardRenderer = new StandardSkeletonRenderer();
     // Tap handling and UI.
     private ArrayBlockingQueue<MotionEvent> mQueuedSingleTaps = new ArrayBlockingQueue<>(2);
 
@@ -66,7 +76,9 @@ public class MainActivity extends AppCompatActivity implements GLSurfaceView.Ren
     private long lastInterval;
     private int frames = 0;
     private float fps;
-
+    private int stdPoseNow;
+    private int type=0;
+    private TextView progressIndicator;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,6 +86,7 @@ public class MainActivity extends AppCompatActivity implements GLSurfaceView.Ren
 
         cameraPoseTextView = (TextView) findViewById(R.id.textView);
         mSurfaceView = (GLSurfaceView) findViewById(R.id.surfaceview);
+        progressIndicator = findViewById(R.id.progress);
         mDisplayRotationHelper = new DisplayRotationHelper(this);
         mGestureDetector = new GestureDetector(this, new GestureDetector.SimpleOnGestureListener() {
             @Override
@@ -87,7 +100,7 @@ public class MainActivity extends AppCompatActivity implements GLSurfaceView.Ren
                 return true;
             }
         });
-
+        stdPoseNow = 0;
 //        mSurfaceView.setOnTouchListener(new View.OnTouchListener() {
 //            @Override
 //            public boolean onTouch(View v, MotionEvent event) {
@@ -252,6 +265,7 @@ public class MainActivity extends AppCompatActivity implements GLSurfaceView.Ren
         mBackgroundRenderer.createOnGlThread(/*context=*/this);
         mBodySkeleton.createOnGlThread(this);
         mSkeletonConnection.createOnGlThread(this);
+        mStandardRenderer.createOnGlThread(this);
         mBodySkeleton.setListener(new BodySkeletonRenderer.OnTextInfoChangeListener() {
             @Override
             public boolean textInfoChanged(String text, float positionX, float positionY) {
@@ -287,9 +301,105 @@ public class MainActivity extends AppCompatActivity implements GLSurfaceView.Ren
 
             mBackgroundRenderer.draw(frame);
             Collection<ARBody> bodies = mSession.getAllTrackables(ARBody.class);
-            Log.i(TAG, "bodies size:" + bodies.size());
+
+            Iterator<ARBody> it = bodies.iterator();
+            while (it.hasNext()){
+                ARBody arb = it.next();
+                float[] bodyStruture = arb.getSkeletonPoint2D();
+                if(arb.getTrackingState()==ARTrackable.TrackingState.TRACKING)
+                {
+
+                    int[] isExist = arb.getSkeletonPointIsExist2D();
+                    String str = "";
+                    int[] connect = arb.getBodySkeletonConnection();
+//                    for(int i=0;i<connect.length;i++){
+//                        str += String.valueOf(connect[i]) + ',';
+//                    }
+//                    Log.d("Eir","Connects" + str);
+
+                    str = "";
+                    int count = 0;
+
+                    String str1 = "";
+                    for (int i = 0; i < isExist.length ; i++) {
+                        if (isExist[i]==1) {
+                            count++;
+                            str += String.valueOf(bodyStruture[3*i])+",";
+                            str1 += String.valueOf(bodyStruture[3*i+1])+",";
+                        }
+                    }
+
+                    ArrayList<double[]> vectorNow = new ArrayList<>();
+                    ArrayList<double[]> vectorStd = new ArrayList<>();
+                    for(int i=0;i<TestData.vector.length/2;i++){
+                        if(isExist[TestData.vector[2*i]]==1 && isExist[TestData.vector[2*i+1]]==1){
+                            double x = bodyStruture[3*TestData.vector[2*i]] - bodyStruture[3*TestData.vector[2*i+1]];
+                            double y = bodyStruture[3*TestData.vector[2*i]+1] - bodyStruture[3*TestData.vector[2*i+1]+1];
+                            double[] tmp = {x,y};
+                            vectorNow.add(tmp);
+                            x = TestData.pos1x[stdPoseNow][TestData.vector[2*i]] - TestData.pos1x[stdPoseNow][TestData.vector[2*i+1]];
+                            y = TestData.pos1y[stdPoseNow][TestData.vector[2*i]] - TestData.pos1y[stdPoseNow][TestData.vector[2*i+1]];
+                            double[] tmp1 = {x,y};
+                            vectorStd.add(tmp1);
+                            }
+                    }
+                    ArrayList<Double> anglesNow = new ArrayList<>();
+                    ArrayList<Double> anglesStd = new ArrayList<>();
+                    if(vectorStd.size()==18&&vectorNow.size()==18)
+                    {
+                        for(int i=0;i<TestData.angle.length/2;i++){
+                            double x1=vectorNow.get(TestData.angle[2*i])[0],x2=vectorNow.get(TestData.angle[2*i+1])[0]
+                                    ,y1=vectorNow.get(TestData.angle[2*i])[1],y2=vectorNow.get(TestData.angle[2*i+1])[1];
+                            anglesNow.add((x1*x2+y1*y2)/(Math.sqrt(x1*x1+y1*y1)+Math.sqrt(x2*x2+y2*y2)));
+                            x1=vectorStd.get(TestData.angle[2*i])[0];
+                            x2=vectorStd.get(TestData.angle[2*i+1])[0];
+                            y1=vectorStd.get(TestData.angle[2*i])[1];
+                            y2=vectorStd.get(TestData.angle[2*i+1])[1];
+                            anglesStd.add((x1*x2+y1*y2)/(Math.sqrt(x1*x1+y1*y1)+Math.sqrt(x2*x2+y2*y2)));
+                        }
+                        double err = 0;
+
+                        for(int i=0;i<anglesNow.size();i++){
+                            err+=anglesNow.get(i)-anglesStd.get(i);
+                        }
+                        if(Math.abs(err)<0.1){
+                            if(type==2){
+                                if(stdPoseNow<2){
+                                    stdPoseNow+=1;
+                                }
+                            } else {
+                                if(stdPoseNow<4){
+                                    stdPoseNow+=1;
+                                }
+                            }
+                        }
+                        Log.d("Eir","error: "+ String.valueOf(err));
+                    }
+
+
+                    Log.d("Eir","x: "+str);
+                    Log.d("Eir","y: "+str1);
+                    double[] x_ = {
+                            bodyStruture[3*0],bodyStruture[3*0+1],
+                            bodyStruture[3*2],bodyStruture[3*2+1],
+                            bodyStruture[3*5],bodyStruture[3*5+1]
+                    };
+                    Log.d("Eir",String.valueOf(count));
+                    mStandardRenderer.updateData(arb,x_,width,height,1,stdPoseNow);
+
+                } else {
+
+                }
+            }
+            if(type!=3)
+            {
+                progressIndicator.setText(String.valueOf(stdPoseNow+1) + "/" + String.valueOf(5));
+            } else {
+                progressIndicator.setText(String.valueOf(stdPoseNow+1) + "/" + String.valueOf(3));
+            }
             mBodySkeleton.updateData(bodies, width, height, fpsResult);
             mSkeletonConnection.updateData(bodies, width, height);
+
 
             // if not tracking, don't draw 3d objects
             if (camera.getTrackingState() != ARTrackable.TrackingState.TRACKING) {

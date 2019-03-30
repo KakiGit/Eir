@@ -10,7 +10,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity"
+        <activity android:name=".ToDoList"
             android:theme="@style/Theme.AppCompat.NoActionBar"
             android:label="@string/app_name"
             android:configChanges="orientation|screenSize">
@@ -19,6 +19,27 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+        <!--<activity-->
+            <!--android:name=".ToDoList"-->
+            <!--android:theme="@style/Theme.AppCompat.NoActionBar"/>-->
+        <!--<activity android:name=".MainActivity"-->
+            <!--android:theme="@style/Theme.AppCompat.NoActionBar"-->
+            <!--android:configChanges="orientation|screenSize"/>-->
         <meta-data android:name="com.huawei.ar.engine" android:value="required"/>
+        <meta-data
+            android:name="me.digi.sdk.AppName"
+            android:value="@string/app_name" />
+        <meta-data
+            android:name="me.digi.sdk.AppId"
+            android:value="@string/APP_ID" />
+        <meta-data
+            android:name="me.digi.sdk.Contracts"
+            android:resource="@string/CONTRACT_ID" />
+        <meta-data
+            android:name="me.digi.sdk.Keys"
+            android:value="@string/P12_KEYSTORE_FILENAME" />
+        <meta-data
+            android:name="me.digi.sdk.KeysPassphrase"
+            android:value="@string/P12_KEYSTORE_PASSWORD" />
     </application>
 </manifest>
