@@ -1,0 +1,35 @@
+buildscript {
+    repositories {
+        google()
+        maven { url 'http://repo1.maven.org/maven2' }
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.2.1'
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        maven { url 'http://repo1.maven.org/maven2' }
+        jcenter()
+
+        def sysprops = System.getProperties()
+
+        if (sysprops['idea.platform.prefix'] == null) // Built from command line
+            jcenter()
+        // else Built from AndroidStudio
+    }
+}
+
+ext{
+    //compile
+    compileSdkVersion = 27
+    minSdkVersion = 26
+    targetSdkVersion = 27
+
+    //version
+    versionName = '1.0'
+
+}
