@@ -1,10 +1,13 @@
 package hackton.health.eir;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -34,8 +37,7 @@ public class ToDoListAdapter extends RecyclerView.Adapter<ToDoListAdapter.ViewHo
         final CardView cardView = holder.getCardView();
         holder.cvId = position;
 //        final CardView.LayoutParams layoutParams = (CardView.LayoutParams)cardView.getLayoutParams();
-        ((TextView)cardView.findViewById(R.id.weeknum)).setText(TestData.timeBefore[holder.cvId]);
-        holder.cvId = position;
+        ((Button)cardView.findViewById(R.id.imageView)).setText(TestData.timeBefore[holder.cvId]);
         if(TestData.healthCheck[holder.cvId]!=null){
             cardView.findViewById(R.id.healthCheck).setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -51,7 +53,14 @@ public class ToDoListAdapter extends RecyclerView.Adapter<ToDoListAdapter.ViewHo
                         description.setText(TestData.healthCheckInfo[holder.cvId]);
                         website.setVisibility(View.VISIBLE);
                         website.setText(TestData.healthCheckWeb[holder.cvId]);
-                        cardView.findViewById(R.id.imageView2).getLayoutParams().height = ViewGroup.LayoutParams.MATCH_PARENT;
+                        website.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                Intent i = new Intent(Intent.ACTION_VIEW);
+                                i.setData(Uri.parse(TestData.healthCheckWeb[holder.cvId]));
+                                cardView.getContext().startActivity(i);
+                            }
+                        });
                     } else {
                         title.setText("No recommendation for health check");
                         description.setText(null);
@@ -80,8 +89,14 @@ public class ToDoListAdapter extends RecyclerView.Adapter<ToDoListAdapter.ViewHo
                         description.setText(TestData.kelaBenefitInfo[holder.cvId]);
                         website.setVisibility(View.VISIBLE);
                         website.setText(TestData.kelaBenefitWeb[holder.cvId]);
-                        cardView.findViewById(R.id.imageView2).getLayoutParams().height = ViewGroup.LayoutParams.MATCH_PARENT;
-
+                        website.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                Intent i = new Intent(Intent.ACTION_VIEW);
+                                i.setData(Uri.parse(TestData.kelaBenefitWeb[holder.cvId]));
+                                cardView.getContext().startActivity(i);
+                            }
+                        });
                     } else {
                         title.setText("No recommendation for kela benefit");
                         description.setText(null);
