@@ -133,5 +133,9 @@ public class TestData {
     public void addExec(int n){
         numberOfExercise.add(n);
     }
+
+    public static ArrayList<Integer> getNumberOfExercise() {
+        return numberOfExercise;
+    }
 }
 

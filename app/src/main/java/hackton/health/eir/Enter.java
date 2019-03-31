@@ -19,6 +19,7 @@ import com.google.gson.JsonElement;
 
 import org.json.JSONArray;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Locale;
 
@@ -174,6 +175,7 @@ public class Enter extends AppCompatActivity implements SDKListener {
                 }
                 Log.d(TAG,"exercises:" +" ::: " + count);
                 TestData.getInstance().addExec(count);
+
                 if(count<120){
                     healthScore.setText("Exec "+String.valueOf(count)+" min"+"\n<120 min this week\n more exercise!");
                 } else  {
