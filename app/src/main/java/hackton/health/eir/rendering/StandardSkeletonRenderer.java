@@ -86,14 +86,7 @@ public class StandardSkeletonRenderer {
 
         ShaderUtil.checkGLError(TAG, "program  params");
 
-        mTextToSpeech = new TextToSpeech(context, new TextToSpeech.OnInitListener() {
-            @Override
-            public void onInit(int status) {
-                if(status != TextToSpeech.ERROR) {
-                    mTextToSpeech.setLanguage(Locale.UK);
-                }
-            }
-        });
+        
 
     }
 

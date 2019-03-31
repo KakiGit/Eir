@@ -18,7 +18,7 @@ public class TodoViewPagerAdapter extends RecyclerView.Adapter<TodoViewPagerAdap
 
     private Context mContext;
     private static String[] mNames = {"Event:","Date:","Things to bring with:","Address:"};
-    private static String[] mValues = {"Public Health Check with doctor", "08/05/2019", "Pregnancy certificate, Photo ID, Test report", "Haaga Counselor, Huovitie 5, 00400 Helsinki"};
+    private static String[] mValues = {"First contact with Neuvola", "08/05/2019", "Pregnancy certificate, Photo ID, Test report", "Haaga Counselor, Huovitie 5, 00400 Helsinki"};
 
     @Override
     public int getItemCount() {

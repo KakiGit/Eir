@@ -1,6 +1,8 @@
 package hackton.health.eir;
 
 
+import java.util.ArrayList;
+
 public class TestData {
     static public int[] vector = {1,2,2,3,3,4,1,5,5,6,6,7,0,1,1,14,14,8,8,9,9,10,14,11,11,12,12,13,0,1,1,2,0,1,1,5};
     static public int[] angle = {0,1,1,2,3,4,4,5,6,7,14,15,16,17,8,9,9,10,11,12,12,13};
@@ -107,5 +109,29 @@ public class TestData {
     public static String[] VaccinationInfo={null,null,null,"PCV 13 vaccine (Prevenar) is recommended for people over 5 years of age and adults who, due to their illness or medication, are particularly at risk of serious pneumococcal infection or complication. Pneumococcal vaccinations in risk groups"};
     public static String[] VaccinationWeb={null,null,null,"https://thl.fi/fi/web/rokottaminen/rokotteet/pneumokokkirokote/pneumokokkikonjugaattirokote-eli-pcv-rokote"};
 
+
+    private static TestData testData;
+
+    private static ArrayList<Integer> numberOfExercise= new ArrayList<>();
+    //private constructor.
+    private TestData(){
+
+        //Prevent form the reflection api.
+        if (testData != null){
+            throw new RuntimeException("Use getInstance() method to get the single instance of this class.");
+        }
+    }
+
+    public static TestData getInstance(){
+        if (testData == null){ //if there is no instance available... create new one
+            testData = new TestData();
+        }
+
+        return testData;
+    }
+
+    public void addExec(int n){
+        numberOfExercise.add(n);
+    }
 }
 
