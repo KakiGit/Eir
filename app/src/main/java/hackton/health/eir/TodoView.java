@@ -86,10 +86,10 @@ public class TodoView extends AppCompatActivity {
                     if (index > -1) {
 //                        Toast.makeText(mCalendarView.getContext(), TestData.healthCheckafter[index], Toast.LENGTH_LONG).show();
                         if(index>1){
-                            popup.setText(TestData.healthCheckafter[index] + "\nNot Enough Execise this week");
+                            popup.setText(TestData.healthCheckafter[index] + "\n\nNot Enough Execise this week");
                         }
                         else {
-                            popup.setText(TestData.healthCheckafter[index] + "\nEnough Execise this week\n GOOD!");
+                            popup.setText(TestData.healthCheckafter[index] + "\n\nEnough Execise this week\n\n GOOD!");
                         }
                         popup.setVisibility(TextView.VISIBLE);
                     }
