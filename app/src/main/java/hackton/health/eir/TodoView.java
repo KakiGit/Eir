@@ -69,7 +69,12 @@ public class TodoView extends AppCompatActivity {
                 if (chosenDate < startTime + (long) (40.0*7*24*3600*1000)) {
                     index = chooseGroupBefore(chosenDate, startTime);
                     if (index > -1) {
-                        popup.setText(TestData.healthCheck[index]);
+                        if(index>1)
+                        {
+                            popup.setText(TestData.healthCheck[index] + "\nNot Enough Execise this week");
+                        } else {
+                            popup.setText(TestData.healthCheck[index] + "\nEnough Execise this week\n GOOD!");
+                        }
                         popup.setVisibility(TextView.VISIBLE);
 //                        Toast.makeText(mCalendarView.getContext(), TestData.healthCheck[index], Toast.LENGTH_LONG).show();
 //                        Intent intent = new Intent(TodoView.this, Popup.class);
@@ -80,7 +85,12 @@ public class TodoView extends AppCompatActivity {
                     index = chooseGroupAfter(chosenDate, startTime);
                     if (index > -1) {
 //                        Toast.makeText(mCalendarView.getContext(), TestData.healthCheckafter[index], Toast.LENGTH_LONG).show();
-                        popup.setText(TestData.healthCheckafter[index]);
+                        if(index>1){
+                            popup.setText(TestData.healthCheckafter[index] + "\nNot Enough Execise this week");
+                        }
+                        else {
+                            popup.setText(TestData.healthCheckafter[index] + "\nEnough Execise this week\n GOOD!");
+                        }
                         popup.setVisibility(TextView.VISIBLE);
                     }
                 }
