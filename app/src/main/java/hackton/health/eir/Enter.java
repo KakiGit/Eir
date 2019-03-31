@@ -175,9 +175,9 @@ public class Enter extends AppCompatActivity implements SDKListener {
                 Log.d(TAG,"exercises:" +" ::: " + count);
                 TestData.getInstance().addExec(count);
                 if(count<120){
-                    healthScore.setText("<120 min this week\n more exercise!");
+                    healthScore.setText("Exec "+String.valueOf(count)+" min"+"\n<120 min this week\n more exercise!");
                 } else  {
-                    healthScore.setText(">120 min this week\n GOOD!");
+                    healthScore.setText("Exec "+String.valueOf(count)+" min"+"\n>120 min this week\n GOOD!");
                 }
             }
 
